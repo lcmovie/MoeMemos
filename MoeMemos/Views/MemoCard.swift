@@ -50,7 +50,7 @@ struct MemoCard: View {
                 }
             }
             
-            MemoCardContent(memo: memo, toggleTaskItem: toggleTaskItem(_:))
+            MemoCardContent(memo: memo, toggleTaskItem: nil)
         }
         .padding([.top, .bottom], 5)
         .contextMenu {
@@ -124,16 +124,6 @@ struct MemoCard: View {
         })
     }
     
-    private func toggleTaskItem(_ configuration: TaskListMarkerConfiguration) async {
-        do {
-            guard var node = configuration.node else { return }
-            node.checkbox = configuration.isCompleted ? .unchecked : .checked
-            
-            try await memosViewModel.editMemo(id: memo.id, content: node.root.format(), visibility: memo.visibility, resourceIdList: memo.resourceList?.map { $0.id })
-        } catch {
-            print(error)
-        }
-    }
 }
 
 struct MemoCard_Previews: PreviewProvider {
