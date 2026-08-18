@@ -6,17 +6,10 @@
 //
 
 import SwiftUI
-import KeychainSwift
 
 struct ContentView: View {
     @AppStorage(memosHostKey, store: UserDefaults(suiteName: groupContainerIdentifier)) private var memosHost = ""
     @AppStorage(memosOpenIdKey, store: UserDefaults(suiteName: groupContainerIdentifier)) private var memosOpenId: String?
-    @State private var keychain = {
-        let keychain = KeychainSwift()
-        keychain.accessGroup = keychainAccessGroupName
-        return keychain
-    }()
-
     @EnvironmentObject private var userState: UserState
     @State private var selection: Route? = .memos
     @StateObject private var memosViewModel = MemosViewModel()
@@ -61,12 +54,11 @@ struct ContentView: View {
     
     func loadCurrentUser() async {
         do {
-            if let legacyMemosHost = UserDefaults.standard.string(forKey: memosHostKey), !legacyMemosHost.isEmpty {
-                memosHost = legacyMemosHost
-                UserDefaults.standard.removeObject(forKey: memosHostKey)
+            if let savedHost = CredentialStore.host(), !savedHost.isEmpty {
+                memosHost = savedHost
             }
-            
-            let accessToken = keychain.get(memosAccessTokenKey)
+
+            let accessToken = CredentialStore.accessToken()
             try await userState.reset(memosHost: memosHost, accessToken: accessToken, openId: memosOpenId)
             try await userState.loadCurrentUser()
         } catch MemosError.notLogin {

@@ -8,7 +8,6 @@
 import WidgetKit
 import SwiftUI
 import Intents
-import KeychainSwift
 
 struct Provider: IntentTimelineProvider {
     func placeholder(in context: Context) -> MemosGraphEntry {
@@ -35,9 +34,7 @@ struct Provider: IntentTimelineProvider {
             return nil
         }
         
-        let keychain = KeychainSwift()
-        keychain.accessGroup = keychainAccessGroupName
-        let accessToken = keychain.get(memosAccessTokenKey)
+        let accessToken = CredentialStore.accessToken()
         
         let openId = UserDefaults(suiteName: groupContainerIdentifier)?.string(forKey: memosOpenIdKey)
         

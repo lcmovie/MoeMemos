@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import KeychainSwift
 
 struct Login: View {
     private enum LoginMethod: Hashable {
@@ -17,12 +16,6 @@ struct Login: View {
     
     @AppStorage(memosHostKey, store: UserDefaults(suiteName: groupContainerIdentifier)) var memosHost = ""
     @AppStorage(memosOpenIdKey, store: UserDefaults(suiteName: groupContainerIdentifier)) var memosOpenId: String?
-    @State private var keychain = {
-        let keychain = KeychainSwift()
-        keychain.accessGroup = keychainAccessGroupName
-        return keychain
-    }()
-
     @State private var host = ""
     @State private var email = ""
     @State private var password = ""
@@ -141,7 +134,8 @@ struct Login: View {
                     password: password,
                     remember: true))
             memosHost = hostAddress
-            keychain.delete(memosAccessTokenKey)
+            CredentialStore.saveHost(hostAddress)
+            CredentialStore.deleteAccessToken()
             memosOpenId = nil
         } else if loginMethod == .accessToken {
             if accessToken.trimmingCharacters(in: .whitespaces).isEmpty {
@@ -150,7 +144,8 @@ struct Login: View {
             
             try await userState.signIn(memosHost: hostAddress, accessToken: accessToken.trimmingCharacters(in: .whitespaces))
             memosHost = try userState.memos.host.absoluteString
-            keychain.set(accessToken.trimmingCharacters(in: .whitespaces), forKey: memosAccessTokenKey)
+            CredentialStore.saveHost(memosHost)
+            CredentialStore.saveAccessToken(accessToken.trimmingCharacters(in: .whitespaces))
             memosOpenId = nil
         } else {
             if openId.trimmingCharacters(in: .whitespaces).isEmpty {
@@ -158,7 +153,8 @@ struct Login: View {
             }
             try await userState.signIn(memosHost: hostAddress, openId: openId.trimmingCharacters(in: .whitespaces))
             memosHost = try userState.memos.host.absoluteString
-            keychain.delete(memosAccessTokenKey)
+            CredentialStore.saveHost(memosHost)
+            CredentialStore.deleteAccessToken()
             memosOpenId = try userState.memos.openId
         }
         

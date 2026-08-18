@@ -64,6 +64,7 @@ class UserState: ObservableObject {
             try await memos.logout()
         }
         currentUser = nil
+        CredentialStore.deleteAccessToken()
         UserDefaults(suiteName: groupContainerIdentifier)?.removeObject(forKey: memosOpenIdKey)
     }
 }

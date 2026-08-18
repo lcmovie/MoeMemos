@@ -8,7 +8,6 @@
 import WidgetKit
 import SwiftUI
 import Intents
-import KeychainSwift
 
 let sampleMemo = Memo(
     id: "memos/sample",
@@ -60,9 +59,7 @@ struct MemoryProvider: IntentTimelineProvider {
         
         let openId = UserDefaults(suiteName: groupContainerIdentifier)?.string(forKey: memosOpenIdKey)
         
-        let keychain = KeychainSwift()
-        keychain.accessGroup = keychainAccessGroupName
-        let accessToken = keychain.get(memosAccessTokenKey)
+        let accessToken = CredentialStore.accessToken()
         
         let memos = try await Memos.create(host: hostURL, accessToken: accessToken, openId: openId)
         
