@@ -18,6 +18,12 @@ MoeMemos iOS 16 是基于 [MoeMemos](https://github.com/mudkipme/MoeMemos) 完�
 | 运行情况 | 用户实测运行正常 |
 | 登录保持 | v0.1.1 已修复，关闭并重新打开 App 后可自动恢复登录 |
 
+### 运行佐证
+
+下图为 MoeMemos 在 iOS 16.0 实机上的运行界面与系统版本信息，设备隐私信息已作遮挡处理。
+
+<img src="docs/images/ios16-iphone13-test.png" alt="MoeMemos 在 iOS 16.0 实机上的运行佐证" width="520" />
+
 以上结果来自真实设备测试。其他 iPhone、iPad 和更高版本 iOS 原则上可以运行，但仍建议以实际设备测试结果为准。
 
 ## 下载
