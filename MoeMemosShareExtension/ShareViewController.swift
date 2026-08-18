@@ -101,11 +101,7 @@ class ShareViewController: SLComposeServiceViewController {
             throw MemosError.invalidParams
         }
         
-        let tags = extractCustomTags(from: content)
-        for name in tags {
-            _ = try await memos.upsertTag(name: name)
-        }
-        _ = try await memos.createMemo(data: MemosCreate.Input(content: content, visibility: nil, resourceIdList: resourceList.map { $0.id }))
+        _ = try await memos.createMemo(data: MemosCreate.Input(content: content, visibility: nil, attachments: resourceList.map { AttachmentInput(name: $0.id, filename: nil, content: nil, type: nil) }))
     }
     
     private func getMemos() async throws -> Memos {
