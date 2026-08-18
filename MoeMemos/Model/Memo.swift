@@ -20,9 +20,9 @@ enum MemosRowStatus: String, Decodable, Encodable {
 }
 
 struct Memo: Decodable, Equatable, Identifiable {
-    let id: Int
+    let id: String
     let createdTs: Date
-    let creatorId: Int
+    let creatorId: String
     let creatorName: String?
     var content: String
     var pinned: Bool
@@ -30,6 +30,20 @@ struct Memo: Decodable, Equatable, Identifiable {
     let updatedTs: Date
     let visibility: MemosVisibility
     let resourceList: [Resource]?
+
+    enum CodingKeys: String, CodingKey { case name, createTime, creator, content, pinned, state, updateTime, visibility, attachments }
+    init(from decoder: Decoder) throws {
+        let v = try decoder.container(keyedBy: CodingKeys.self)
+        id = try v.decode(String.self, forKey: .name); createdTs = try v.decodeIfPresent(Date.self, forKey: .createTime) ?? .now
+        creatorId = try v.decodeIfPresent(String.self, forKey: .creator) ?? ""; creatorName = nil
+        content = try v.decodeIfPresent(String.self, forKey: .content) ?? ""; pinned = try v.decodeIfPresent(Bool.self, forKey: .pinned) ?? false
+        rowStatus = try v.decodeIfPresent(MemosRowStatus.self, forKey: .state) ?? .normal; updatedTs = try v.decodeIfPresent(Date.self, forKey: .updateTime) ?? createdTs
+        visibility = try v.decodeIfPresent(MemosVisibility.self, forKey: .visibility) ?? .private; resourceList = try v.decodeIfPresent([Resource].self, forKey: .attachments)
+    }
+    init(id: String, createdTs: Date, creatorId: String, creatorName: String?, content: String, pinned: Bool, rowStatus: MemosRowStatus, updatedTs: Date, visibility: MemosVisibility, resourceList: [Resource]?) {
+        self.id = id; self.createdTs = createdTs; self.creatorId = creatorId; self.creatorName = creatorName; self.content = content; self.pinned = pinned
+        self.rowStatus = rowStatus; self.updatedTs = updatedTs; self.visibility = visibility; self.resourceList = resourceList
+    }
 }
 
 struct Tag: Identifiable, Hashable {

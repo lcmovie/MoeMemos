@@ -18,18 +18,19 @@ class ArchivedMemoListViewModel: ObservableObject {
     @Published private(set) var archivedMemoList: [Memo] = []
     
     func loadArchivedMemos() async throws {
-        let response = try await memos.listMemos(data: MemosListMemo.Input(creatorId: nil, rowStatus: .archived, visibility: nil))
+        let user = try await memos.me()
+        let response = try await memos.listMemos(data: MemosListMemo.Input(pageSize: 200, state: .archived, filter: "creator == '\(user.id)'"))
         archivedMemoList = response
     }
     
-    func restoreMemo(id: Int) async throws {
-        _ = try await memos.updateMemo(data: MemosPatch.Input(id: id, createdTs: nil, rowStatus: .normal, content: nil, visibility: nil, resourceIdList: nil))
+    func restoreMemo(id: String) async throws {
+        _ = try await memos.updateMemo(data: MemosPatch.Input(name: id, state: .normal, content: nil, visibility: nil, pinned: nil, attachments: nil))
         archivedMemoList = archivedMemoList.filter({ memo in
             memo.id != id
         })
     }
     
-    func deleteMemo(id: Int) async throws {
+    func deleteMemo(id: String) async throws {
         _ = try await memos.deleteMemo(id: id)
         archivedMemoList = archivedMemoList.filter({ memo in
             memo.id != id

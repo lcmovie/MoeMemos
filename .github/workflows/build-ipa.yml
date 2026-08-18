@@ -1,0 +1,31 @@
+name: Build unsigned IPA
+on:
+  workflow_dispatch:
+  push:
+    branches: [agent/ios16-memos030]
+jobs:
+  build:
+    runs-on: macos-15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build application
+        run: |
+          set -euo pipefail
+          xcodebuild -resolvePackageDependencies -project MoeMemos.xcodeproj -scheme MoeMemos
+          xcodebuild build -project MoeMemos.xcodeproj -scheme MoeMemos -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath "$RUNNER_TEMP/DerivedData" CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=''
+      - name: Package IPA
+        run: |
+          set -euo pipefail
+          APP_PATH="$(find "$RUNNER_TEMP/DerivedData/Build/Products/Release-iphoneos" -maxdepth 1 -name 'MoeMemos.app' -print -quit)"
+          test -n "$APP_PATH"
+          mkdir -p "$RUNNER_TEMP/ipa/Payload"
+          cp -R "$APP_PATH" "$RUNNER_TEMP/ipa/Payload/"
+          cd "$RUNNER_TEMP/ipa"
+          zip -qry "$GITHUB_WORKSPACE/MoeMemos-iOS16-Memos030-unsigned.ipa" Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MoeMemos-iOS16-Memos030-unsigned
+          path: MoeMemos-iOS16-Memos030-unsigned.ipa
+          if-no-files-found: error

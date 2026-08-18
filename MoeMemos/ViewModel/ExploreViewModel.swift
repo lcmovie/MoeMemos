@@ -23,10 +23,10 @@ class ExploreViewModel: ObservableObject {
     func loadMemos() async throws {
         do {
             loading = true
-            let response = try await memos.listAllMemo(data: MemosListAllMemo.Input(pinned: nil, tag: nil, visibility: nil, limit: 20, offset: nil))
+            let response = try await memos.listMemos(data: MemosListMemo.Input(pageSize: 100, state: .normal, filter: nil))
             memoList = response
             loading = false
-            hasMore = response.count >= 20
+            hasMore = false
         } catch {
             loading = false
             throw error
@@ -37,7 +37,7 @@ class ExploreViewModel: ObservableObject {
         guard !loading && hasMore else { return }
         do {
             loading = true
-            let response = try await memos.listAllMemo(data: MemosListAllMemo.Input(pinned: nil, tag: nil, visibility: nil, limit: 20, offset: memoList.count))
+            let response: [Memo] = []
             memoList += response
             loading = false
             hasMore = response.count >= 20

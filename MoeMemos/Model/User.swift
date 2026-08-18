@@ -17,12 +17,21 @@ struct MemosUser: Decodable {
     let createdTs: Date
     let email: String?
     let username: String?
-    let id: Int
+    let id: String
     let name: String?
     let nickname: String?
     let role: String?
     let updatedTs: Date?
     let userSettingList: [MemosUserSetting]?
+
+    enum CodingKeys: String, CodingKey { case name, createTime, updateTime, email, username, displayName, role }
+    init(from decoder: Decoder) throws {
+        let v = try decoder.container(keyedBy: CodingKeys.self)
+        id = try v.decodeIfPresent(String.self, forKey: .name) ?? ""; createdTs = try v.decodeIfPresent(Date.self, forKey: .createTime) ?? .now
+        updatedTs = try v.decodeIfPresent(Date.self, forKey: .updateTime); email = try v.decodeIfPresent(String.self, forKey: .email)
+        username = try v.decodeIfPresent(String.self, forKey: .username); name = try v.decodeIfPresent(String.self, forKey: .displayName)
+        nickname = name; role = try v.decodeIfPresent(String.self, forKey: .role); userSettingList = nil
+    }
     
     var displayName: String {
         nickname ?? name ?? ""

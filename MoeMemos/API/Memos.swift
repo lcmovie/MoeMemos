@@ -40,87 +40,56 @@ class Memos {
         try await memos.loadStatus()
         return memos
     }
-    
-    func signIn(data: MemosSignIn.Input) async throws {
-        _ = try await MemosSignIn.request(self, data: data, param: ())
-    }
+
+    func signIn(data: MemosSignIn.Input) async throws { throw MemosError.invalidParams }
     
     func logout() async throws {
-        do {
-            _ = try await MemosLogout.request(self, data: nil, param: ())
-        } catch {
-            print(error)
-        }
         session.configuration.httpCookieStorage?.removeCookies(since: .distantPast)
     }
     
-    func me() async throws -> MemosMe.Output {
-        return try await MemosMe.request(self, data: nil, param: ())
+    func me() async throws -> MemosUser {
+        return try await MemosMe.request(self, data: nil, param: ()).user
     }
     
-    func listMemos(data: MemosListMemo.Input?) async throws -> MemosListMemo.Output {
-        return try await MemosListMemo.request(self, data: data, param: ())
+    func listMemos(data: MemosListMemo.Input?) async throws -> [Memo] {
+        return try await MemosListMemo.request(self, data: data, param: ()).memos
     }
     
-    func tags(data: MemosTag.Input?) async throws -> MemosTag.Output {
-        return try await MemosTag.request(self, data: data, param: ())
+    func tags(user: String) async throws -> [String] {
+        let response = try await MemosTag.request(self, data: nil, param: user)
+        return Array(response.tagCount?.keys ?? Dictionary<String, Int>().keys).sorted()
     }
     
     func createMemo(data: MemosCreate.Input) async throws -> MemosCreate.Output {
         return try await MemosCreate.request(self, data: data, param: ())
     }
     
-    func updateMemoOrganizer(memoId: Int, data: MemosOrganizer.Input) async throws -> MemosOrganizer.Output {
-        return try await MemosOrganizer.request(self, data: data, param: memoId)
+    func updateMemoOrganizer(memoId: String, pinned: Bool) async throws -> Memo {
+        return try await MemosPatch.request(self, data: .init(name: memoId, state: nil, content: nil, visibility: nil, pinned: pinned, attachments: nil), param: memoId)
     }
     
     func updateMemo(data: MemosPatch.Input) async throws -> MemosPatch.Output {
-        return try await MemosPatch.request(self, data: data, param: data.id)
+        return try await MemosPatch.request(self, data: data, param: data.name)
     }
     
-    func deleteMemo(id: Int) async throws -> MemosDelete.Output {
+    func deleteMemo(id: String) async throws -> MemosDelete.Output {
         return try await MemosDelete.request(self, data: nil, param: id)
     }
     
-    func listResources() async throws -> MemosListResource.Output {
-        return try await MemosListResource.request(self, data: nil, param: ())
+    func listResources() async throws -> [Resource] {
+        return try await MemosListResource.request(self, data: nil, param: ()).attachments
     }
     
     func uploadResource(imageData: Data, filename: String, contentType: String) async throws -> MemosUploadResource.Output {
-        if self.status?.profile.version.compare("0.10.2", options: .numeric) == .orderedAscending {
-            let response = try await MemosUploadResourceLegacy.request(self, data: [Multipart(name: "file", filename: filename, contentType: contentType, data: imageData)], param: ())
-            return response.data
-        }
-        
-        return try await MemosUploadResource.request(self, data: [Multipart(name: "file", filename: filename, contentType: contentType, data: imageData)], param: ())
+        return try await MemosUploadResource.request(self, data: AttachmentInput(name: nil, filename: filename, content: imageData.base64EncodedString(), type: contentType), param: ())
     }
     
-    func deleteResource(id: Int) async throws -> MemosDeleteResource.Output {
+    func deleteResource(id: String) async throws -> MemosDeleteResource.Output {
         return try await MemosDeleteResource.request(self, data: nil, param: id)
     }
     
     func loadStatus() async throws {
-        do {
-            let response = try await MemosStatus.request(self, data: nil, param: ())
-            status = response
-        } catch MemosError.invalidStatusCode(let code, _) {
-            if code >= 400 && code < 500 {
-                let response = try await MemosV0Status.request(self, data: nil, param: ())
-                status = response.data
-            }
-        }
-    }
-    
-    func upsertTag(name: String) async throws -> MemosUpsertTag.Output {
-        return try await MemosUpsertTag.request(self, data: MemosUpsertTag.Input(name: name), param: ())
-    }
-    
-    func listAllMemo(data: MemosListAllMemo.Input?) async throws -> MemosListAllMemo.Output {
-        return try await MemosListAllMemo.request(self, data: data, param: ())
-    }
-    
-    func deleteTag(name: String) async throws -> MemosDeleteTag.Output {
-        return try await MemosDeleteTag.request(self, data: MemosDeleteTag.Input(name: name), param: ())
+        status = try await MemosStatus.request(self, data: nil, param: ())
     }
     
     func url(for resource: Resource) -> URL {

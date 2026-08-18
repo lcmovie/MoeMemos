@@ -34,6 +34,6 @@ struct ExploreMemoCard: View {
 
 struct ExploreMemoCard_Previews: PreviewProvider {
     static var previews: some View {
-        ExploreMemoCard(memo: Memo(id: 1, createdTs: .now.addingTimeInterval(-100), creatorId: 1, creatorName: nil, content: "Hello world\n\nThis is a **multiline** statement and thank you for everything.", pinned: false, rowStatus: .normal, updatedTs: .now, visibility: .private, resourceList: nil))
+        ExploreMemoCard(memo: Memo(id: "memos/1", createdTs: .now.addingTimeInterval(-100), creatorId: "users/1", creatorName: nil, content: "Hello world\n\nThis is a **multiline** statement and thank you for everything.", pinned: false, rowStatus: .normal, updatedTs: .now, visibility: .private, resourceList: nil))
     }
 }

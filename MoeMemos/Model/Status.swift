@@ -8,11 +8,14 @@
 import Foundation
 
 struct MemosProfile: Decodable {
-    let mode: String
     let version: String
 }
 
 struct MemosServerStatus: Decodable {
-    let host: MemosUser
     let profile: MemosProfile
+    enum CodingKeys: String, CodingKey { case version }
+    init(from decoder: Decoder) throws {
+        let v = try decoder.container(keyedBy: CodingKeys.self)
+        profile = MemosProfile(version: try v.decode(String.self, forKey: .version))
+    }
 }

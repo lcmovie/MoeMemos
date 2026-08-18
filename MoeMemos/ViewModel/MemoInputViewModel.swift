@@ -39,7 +39,7 @@ class MemoInputViewModel: ObservableObject, ResourceManager {
         resourceList.append(response)
     }
     
-    func deleteResource(id: Int) async throws {
+    func deleteResource(id: String) async throws {
         _ = try await memos.deleteResource(id: id)
         resourceList = resourceList.filter({ resource in
             resource.id != id

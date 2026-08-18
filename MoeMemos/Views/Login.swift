@@ -34,7 +34,7 @@ struct Login: View {
     @State private var loginError: Error?
     @State private var showingErrorToast = false
     @State private var showLoadingToast = false
-    @State private var loginMethod: LoginMethod = .usernamdAndPassword
+    @State private var loginMethod: LoginMethod = .accessToken
     
     var body: some View {
         VStack {
@@ -49,9 +49,7 @@ struct Login: View {
                 .padding(.bottom, 20)
             
             Picker("login.method", selection: $loginMethod) {
-                Text("login.username-and-password").tag(LoginMethod.usernamdAndPassword)
                 Text("login.access-token").tag(LoginMethod.accessToken)
-                Text("login.open-id").tag(LoginMethod.openAPI)
             }
             .pickerStyle(.segmented)
             .padding(.bottom, 10)

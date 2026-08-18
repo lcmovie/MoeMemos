@@ -9,13 +9,21 @@ import Foundation
 
 private var memosJsonDecoder: JSONDecoder {
     let decoder = JSONDecoder()
-    decoder.dateDecodingStrategy = .secondsSince1970
+    decoder.dateDecodingStrategy = .custom { decoder in
+        let value = try decoder.singleValueContainer().decode(String.self)
+        let fractional = ISO8601DateFormatter()
+        fractional.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let date = fractional.date(from: value) { return date }
+        let standard = ISO8601DateFormatter()
+        if let date = standard.date(from: value) { return date }
+        throw DecodingError.dataCorruptedError(in: try decoder.singleValueContainer(), debugDescription: "Invalid ISO-8601 date: \(value)")
+    }
     return decoder
 }
 
 private var memosJsonEncoder: JSONEncoder {
     let encoder = JSONEncoder()
-    encoder.dateEncodingStrategy = .secondsSince1970
+    encoder.dateEncodingStrategy = .iso8601
     return encoder
 }
 
