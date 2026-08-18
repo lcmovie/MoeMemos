@@ -11,9 +11,9 @@ import Intents
 import KeychainSwift
 
 let sampleMemo = Memo(
-    id: 0,
+    id: "memos/sample",
     createdTs: Date(),
-    creatorId: 0,
+    creatorId: "users/sample",
     creatorName: nil,
     content: "Make your wonderful dream a reality, and it will become your truth.",
     pinned: false,
@@ -66,7 +66,8 @@ struct MemoryProvider: IntentTimelineProvider {
         
         let memos = try await Memos.create(host: hostURL, accessToken: accessToken, openId: openId)
         
-        let response = try await memos.listMemos(data: MemosListMemo.Input(creatorId: nil, rowStatus: .normal, visibility: nil))
+        let user = try await memos.me()
+        let response = try await memos.listMemos(data: MemosListMemo.Input(pageSize: 200, state: .normal, filter: "creator == '\(user.id)'"))
         return [Memo](response.shuffled().prefix(frequency.memosPerDay))
     }
 

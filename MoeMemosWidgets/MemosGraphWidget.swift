@@ -43,7 +43,8 @@ struct Provider: IntentTimelineProvider {
         
         let memos = try await Memos.create(host: hostURL, accessToken: accessToken, openId: openId)
         
-        let response = try await memos.listMemos(data: MemosListMemo.Input(creatorId: nil, rowStatus: .normal, visibility: nil))
+        let user = try await memos.me()
+        let response = try await memos.listMemos(data: MemosListMemo.Input(pageSize: 200, state: .normal, filter: "creator == '\(user.id)'"))
         return DailyUsageStat.calculateMatrix(memoList: response)
     }
 
