@@ -1395,7 +1395,7 @@
 /* Begin XCRemoteSwiftPackageReference section */
 		190755972B66512200451E6D /* XCRemoteSwiftPackageReference "swift-markdown" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mudkipme/swift-markdown";
+			repositoryURL = "https://github.com/swiftlang/swift-markdown.git";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -1403,7 +1403,7 @@
 		};
 		193D274B29C8D1EB00BDE4A2 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mudkipme/swift-markdown-ui";
+			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
 			requirement = {
 				branch = main;
 				kind = branch;
