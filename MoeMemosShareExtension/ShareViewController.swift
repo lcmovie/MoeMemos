@@ -10,7 +10,6 @@ import Social
 import SwiftUI
 import KeychainSwift
 import UniformTypeIdentifiers
-import Markdown
 
 class ShareViewController: SLComposeServiceViewController {
     
@@ -120,10 +119,4 @@ class ShareViewController: SLComposeServiceViewController {
         return try await Memos.create(host: hostURL, accessToken: accessToken, openId: openId)
     }
     
-    private func extractCustomTags(from markdownText: String) -> [String] {
-        let document = Document(parsing: markdownText)
-        var tagVisitor = TagVisitor()
-        document.accept(&tagVisitor)
-        return tagVisitor.tags
-    }
 }

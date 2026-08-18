@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		190755992B66512200451E6D /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = 190755982B66512200451E6D /* Markdown */; };
 		1907559A2B66514700451E6D /* TagVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193D274E29C8D85700BDE4A2 /* TagVisitor.swift */; };
 		1911568A29802F200058F18B /* QuickLookRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1911568929802F200058F18B /* QuickLookRepresentable.swift */; };
 		191339AF291D7288001F2B2E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 191339AE291D7288001F2B2E /* WidgetKit.framework */; };
@@ -312,7 +311,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				19E866652AB851E800E33521 /* KeychainSwift in Frameworks */,
-				190755992B66512200451E6D /* Markdown in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -637,7 +635,6 @@
 			name = MoeMemosShareExtension;
 			packageProductDependencies = (
 				19E866642AB851E800E33521 /* KeychainSwift */,
-				190755982B66512200451E6D /* Markdown */,
 			);
 			productName = MoeMemosShareExtension;
 			productReference = 19E29A682938FBCD00BE9C32 /* MoeMemosShareExtension.appex */;
@@ -690,7 +687,6 @@
 				31EE785D29B9E6F4005F62D0 /* XCRemoteSwiftPackageReference "Highlightr" */,
 				193D274B29C8D1EB00BDE4A2 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				19E8665F2AB84ACA00E33521 /* XCRemoteSwiftPackageReference "keychain-swift" */,
-				190755972B66512200451E6D /* XCRemoteSwiftPackageReference "swift-markdown" */,
 			);
 			productRefGroup = 194B272E28C3973400A48675 /* Products */;
 			projectDirPath = "";
@@ -1393,14 +1389,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		190755972B66512200451E6D /* XCRemoteSwiftPackageReference "swift-markdown" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/swiftlang/swift-markdown.git";
-			requirement = {
-				kind = exactVersion;
-				version = 0.2.0;
-			};
-		};
 		193D274B29C8D1EB00BDE4A2 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
@@ -1428,11 +1416,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		190755982B66512200451E6D /* Markdown */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 190755972B66512200451E6D /* XCRemoteSwiftPackageReference "swift-markdown" */;
-			productName = Markdown;
-		};
 		193D274C29C8D1EB00BDE4A2 /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 193D274B29C8D1EB00BDE4A2 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;

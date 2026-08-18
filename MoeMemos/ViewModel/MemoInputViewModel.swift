@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 import PhotosUI
 import SwiftUI
-import Markdown
 
 @MainActor
 class MemoInputViewModel: ObservableObject, ResourceManager {
@@ -47,9 +46,6 @@ class MemoInputViewModel: ObservableObject, ResourceManager {
     }
     
     func extractCustomTags(from markdownText: String) -> [String] {
-        let document = Document(parsing: markdownText)
-        var tagVisitor = TagVisitor()
-        document.accept(&tagVisitor)
-        return tagVisitor.tags
+        return TagVisitor.extract(from: markdownText)
     }
 }
