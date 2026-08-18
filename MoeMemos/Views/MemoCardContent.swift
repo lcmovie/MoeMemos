@@ -30,7 +30,7 @@ struct MemoCardContent: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            MarkdownView(memo.content)
+            Markdown(memo.content)
                 .markdownImageProvider(.lazyImage(aspectRatio: 4 / 3))
                 .markdownCodeSyntaxHighlighter(colorScheme == .dark ? .dark() : .light())
                 .markdownTaskListMarker(BlockStyle { configuration in
