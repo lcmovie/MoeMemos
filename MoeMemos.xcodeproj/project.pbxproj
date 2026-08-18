@@ -1397,16 +1397,16 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/swiftlang/swift-markdown.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = revision;
+				revision = 2e0ffeea72a69c36eed2966528df30e75f3c2cf3;
 			};
 		};
 		193D274B29C8D1EB00BDE4A2 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = revision;
+				revision = 546a16ded56b83bb2ea48ec177f60a236931099f;
 			};
 		};
 		19E8665F2AB84ACA00E33521 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
